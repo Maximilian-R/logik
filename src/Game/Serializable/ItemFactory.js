@@ -19,23 +19,32 @@ import { Fan } from '../Electronics/Parts/Fan';
 import { Light } from '../Electronics/Parts/Light';
 import { Wire } from '../Electronics/Wire';
 
-const itemClasses = {
-    and: AndGate,
-    battery: BatteryGate,
-    combiner: CombinerGate,
-    counter: CounterGate,
-    key: KeyGate,
-    measure: MeasureGate,
-    not: NotGate,
-    or: OrGate,
-    selector: SelectorGate,
-    splitter: SplitterGate,
-    switch: SwitchGate,
-    timer: TimerGate,
-    toggle: ToggleGate,
-    xor: XorGate,
-    light: Light,
-    fan: Fan,
+export const ITEM_CLASSES = {
+    gates: {
+        and: AndGate,
+        battery: BatteryGate,
+        combiner: CombinerGate,
+        counter: CounterGate,
+        key: KeyGate,
+        measure: MeasureGate,
+        not: NotGate,
+        or: OrGate,
+        selector: SelectorGate,
+        splitter: SplitterGate,
+        switch: SwitchGate,
+        timer: TimerGate,
+        toggle: ToggleGate,
+        xor: XorGate,
+    },
+    parts: {
+        light: Light,
+        fan: Fan,
+    },
+};
+
+export const ALL_ITEM_CLASSES = {
+    ...ITEM_CLASSES.gates,
+    ...ITEM_CLASSES.parts,
 };
 
 export class ItemFactory {
@@ -54,7 +63,7 @@ export class ItemFactory {
     static create(data) {
         const position = MVector.Create(data.position[0], data.position[1]);
         try {
-            const item = new itemClasses[data.name.toLowerCase()](position, data.id);
+            const item = new ALL_ITEM_CLASSES[data.name.toLowerCase()](position, data.id);
             if (data.settings) {
                 item.applySettings(data.settings);
             }

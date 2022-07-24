@@ -38,6 +38,10 @@ export class Collider {
         game.collisionManager.add(this);
     }
 
+    get position() {
+        return this.gameObject.getGlobalPosition();
+    }
+
     remove() {
         game.collisionManager.remove(this);
     }
@@ -52,10 +56,6 @@ export class ColliderBox extends Collider {
         this.dimension = dimension;
     }
 
-    get position() {
-        return this.gameObject.getGlobalPosition();
-    }
-
     // works with rectmode center
     // sketch.rectMode()._renderer._rectMode = 'center'
     isColliding(position) {
@@ -68,6 +68,17 @@ export class ColliderBox extends Collider {
         return isColliding;
     }
 }
+
+// export class ColliderCircle extends Collider {
+//     constructor(gameObject, radius) {
+//         super(gameObject);
+//         this.radius = radius;
+//     }
+
+//     isColliding(position) {
+//         return position.dist(this.position) < this.radius;
+//     }
+// }
 
 export class Dimension {
     constructor(w, h) {

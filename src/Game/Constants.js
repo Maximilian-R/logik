@@ -18,3 +18,7 @@ export const SOCKET_HIGHLIGHT_COLOR = '#FFF';
 
 export const LIGHT_OFF_COLOR = '#2C3544';
 export const LIGHT_ON_COLOR = '#FFFB7D';
+
+export const WIRE_ON_COLOR = SOCKET_ON_COLOR;
+export const WIRE_OFF_COLOR = SOCKET_OFF_COLOR;
+export const WIRE_DELETE_COLOR = '#FF7D7D';

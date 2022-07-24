@@ -50,7 +50,11 @@ export class Fan extends Item {
 
         sketch.noFill();
         sketch.strokeWeight(GATE_FRAME_WIDTH);
-        sketch.stroke(GATE_FRAME_COLOR);
+        if (this.isHighlight) {
+            sketch.stroke(GATE_HIGHLIGHT_COLOR);
+        } else {
+            sketch.stroke(GATE_FRAME_COLOR);
+        }
         sketch.ellipse(0, 0, this.dimension.width, this.dimension.height);
         sketch.pop();
     }

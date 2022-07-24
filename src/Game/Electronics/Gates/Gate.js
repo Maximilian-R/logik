@@ -122,7 +122,7 @@ export class Gate extends Item {
             sketch.textAlign(sketch.CENTER);
             sketch.fill(255);
             sketch.noStroke();
-            sketch.text(this.text, 0, 0);
+            sketch.text(this.text, 0, 4);
         }
     }
 }

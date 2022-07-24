@@ -62,6 +62,10 @@ export class InputSocket extends Socket {
         super(position, onNextState);
     }
 
+    hasConnection() {
+        return !!this.wire;
+    }
+
     connect(wire) {
         this.wire = wire;
     }

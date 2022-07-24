@@ -1,25 +1,8 @@
 import { SCALE } from '../Constants';
 import { SaveManager } from '../Serializable/SaveManager';
 import * as dat from 'dat.gui';
-import {
-    AndGate,
-    BatteryGate,
-    CombinerGate,
-    CounterGate,
-    KeyGate,
-    MeasureGate,
-    NotGate,
-    OrGate,
-    SelectorGate,
-    SplitterGate,
-    TimerGate,
-    ToggleGate,
-    XorGate,
-} from '../Electronics/Gates';
 
-import { Light } from '../Electronics/Parts/Light';
-import { Fan } from '../Electronics/Parts/Fan';
-import { SwitchGate } from '../Electronics/Gates/Switch';
+import { ITEM_CLASSES } from '../Serializable/ItemFactory';
 
 export class Menu {
     constructor(editor) {
@@ -28,6 +11,7 @@ export class Menu {
         const menu = {
             grid: true,
             scale: SCALE,
+            pathFindingDraw: false,
             save: () => {
                 SaveManager.save(this.editor.world.gameObjects);
             },
@@ -48,35 +32,26 @@ export class Menu {
         gui.add(menu, 'grid')
             .name('Grid')
             .onChange((event) => (this.editor.grid.render = event));
+        gui.add(menu, 'pathFindingDraw')
+            .name('Draw Path Finding')
+            .onChange((event) => (game.pathFinding.debugDraw = event));
         gui.add(menu, 'save').name('Save');
         gui.add(menu, 'load').name('Load');
 
-        const gatesMenu = {
-            and: () => this.editor.placeItem(AndGate),
-            battery: () => this.editor.placeItem(BatteryGate),
-            combiner: () => this.editor.placeItem(CombinerGate),
-            counter: () => this.editor.placeItem(CounterGate),
-            key: () => this.editor.placeItem(KeyGate),
-            measure: () => this.editor.placeItem(MeasureGate),
-            not: () => this.editor.placeItem(NotGate),
-            or: () => this.editor.placeItem(OrGate),
-            selector: () => this.editor.placeItem(SelectorGate),
-            splitter: () => this.editor.placeItem(SplitterGate),
-            switch: () => this.editor.placeItem(SwitchGate),
-            timer: () => this.editor.placeItem(TimerGate),
-            toggle: () => this.editor.placeItem(ToggleGate),
-            xor: () => this.editor.placeItem(XorGate),
-        };
+        const gatesMenu = {};
+        for (const [key, value] of Object.entries(ITEM_CLASSES.gates)) {
+            gatesMenu[key] = () => this.editor.placeItem(value);
+        }
 
         const gatesFolder = gui.addFolder('Gates');
         for (const [key, value] of Object.entries(gatesMenu)) {
             gatesFolder.add(gatesMenu, key).name(key.charAt(0).toUpperCase() + key.slice(1));
         }
 
-        const partsMenu = {
-            fan: () => this.editor.placeItem(Fan),
-            light: () => this.editor.placeItem(Light),
-        };
+        const partsMenu = {};
+        for (const [key, value] of Object.entries(ITEM_CLASSES.parts)) {
+            partsMenu[key] = () => this.editor.placeItem(value);
+        }
 
         const partsFolder = gui.addFolder('Parts');
         for (const [key, value] of Object.entries(partsMenu)) {

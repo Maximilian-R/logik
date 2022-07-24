@@ -1,3 +1,4 @@
+import { WIRE_OFF_COLOR, WIRE_ON_COLOR } from '../Constants';
 import { GameObject } from '../GameObject';
 
 export class Wire extends GameObject {
@@ -13,13 +14,14 @@ export class Wire extends GameObject {
         this.endPosition = this._output.getGlobalPosition();
 
         this.thickness = 6;
+        this.customColor;
     }
 
     set input(socket) {
-        if (socket) {
-            this._input = socket;
-            socket.connect(this);
+        this._input = socket;
 
+        if (socket) {
+            socket.connect(this);
             // set current state
             socket.electronic.nextState(this.output.electronic.power);
         }
@@ -27,6 +29,7 @@ export class Wire extends GameObject {
     get input() {
         return this._input;
     }
+
     set output(socket) {
         if (socket) {
             this._output = socket;
@@ -37,8 +40,20 @@ export class Wire extends GameObject {
         return this._output;
     }
 
+    get isOn() {
+        return this.output.electronic.isOn;
+    }
+
+    get color() {
+        return this.customColor ?? (this.isOn ? WIRE_ON_COLOR : WIRE_OFF_COLOR);
+    }
+
     addWaypoint(position) {
         this.waypoints.push(position);
+    }
+
+    addWaypoints(positions) {
+        this.waypoints.push(...positions);
     }
 
     removeWaypoint() {
@@ -56,17 +71,9 @@ export class Wire extends GameObject {
         super.remove();
     }
 
-    isOn() {
-        return this.output.electronic.isOn;
-    }
-
     draw() {
         super.draw();
-        if (this.isOn()) {
-            sketch.stroke('#7DF9FF');
-        } else {
-            sketch.stroke('#2b3544');
-        }
+        sketch.stroke(this.color);
         sketch.strokeCap(sketch.PROJECT);
         sketch.strokeWeight(this.thickness);
         sketch.noFill();
@@ -92,16 +99,15 @@ export class Wire extends GameObject {
             return curr;
         });
 
-        if (this.isOn()) {
-            sketch.fill('#7DF9FF');
-        } else {
-            sketch.fill('#2b3544');
-        }
+        sketch.fill(this.color);
         sketch.noStroke();
 
         this.waypoints.forEach((position) => {
             sketch.rect(position.x, position.y, 12, 12, 3, 3);
         });
+        if (!this.input) {
+            sketch.rect(endPoint.x, endPoint.y, 12, 12, 3, 3);
+        }
     }
 
     serialize() {

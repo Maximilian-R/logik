@@ -1,9 +1,9 @@
 import { EditorState } from './EditorState';
-import { OutputSocket } from '../../Electronics/Socket';
-import { CreateWireState } from './CreateWire';
+import { Socket } from '../../Electronics/Socket';
 import { MouseEvent } from '../../../Utilities/Input';
 import { MoveItemState } from './MoveItemState';
 import { Item } from '../../Electronics/Item';
+import { ModifyWireState } from './ModifyWire';
 
 export class DefaultState extends EditorState {
     constructor(editor) {
@@ -16,9 +16,9 @@ export class DefaultState extends EditorState {
                 const position = this.editor.cursor.position;
                 const colliders = this.editor.collisionManager.collidingWith(position).map((collider) => collider.gameObject);
 
-                const outputSocket = colliders.find((collider) => collider instanceof OutputSocket);
-                if (outputSocket) {
-                    this.nextState = new CreateWireState(this.editor, outputSocket);
+                const socket = colliders.find((collider) => collider instanceof Socket);
+                if (socket) {
+                    this.nextState = new ModifyWireState(this.editor, socket);
                 }
             }
 

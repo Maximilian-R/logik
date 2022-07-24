@@ -7,6 +7,7 @@ export class SaveManager {
         const gameObjects = ItemFactory.createAll(json.gameObjects);
         onLoad(gameObjects);
     }
+
     static save(gameObjects) {
         const json = {};
 
